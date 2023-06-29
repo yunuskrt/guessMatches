@@ -1,0 +1,7 @@
+.offcanvasitem:hover{
+    background-color: #eee;
+    cursor: pointer;
+}
+.offcanvasitem{
+    padding: 0.5rem;
+}
