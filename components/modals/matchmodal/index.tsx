@@ -4,6 +4,7 @@ import Table from 'react-bootstrap/Table'
 import Accordion from 'react-bootstrap/Accordion'
 import TabBar from '@components/tabbar'
 import MatchProps from '@models/match'
+import { useGlobalContext } from '@contexts/context'
 
 type Props = {
 	match: MatchProps
@@ -50,19 +51,21 @@ const MatchModal = ({
 			['0-2', '3-5', '6+'],
 		],
 	}
+	const { theme } = useGlobalContext()
+	const otherTheme = theme === 'light' ? 'dark' : 'light'
 	return (
 		<Modal show={show} onHide={handleClose} keyboard={false} centered>
-			<Modal.Header closeButton>
+			<Modal.Header closeButton className={`bg-${theme} text-${otherTheme}`}>
 				<Modal.Title>
 					{match.homeTeam} - {match.awayTeam}
 				</Modal.Title>
 			</Modal.Header>
-			<Modal.Body>
+			<Modal.Body className={`bg-${theme}`}>
 				<Accordion defaultActiveKey={['0']} alwaysOpen>
 					<Accordion.Item eventKey='0'>
 						<Accordion.Header>TARAF</Accordion.Header>
-						<Accordion.Body>
-							<Table striped bordered hover>
+						<Accordion.Body className={`bg-${theme}`}>
+							<Table striped bordered hover variant={theme}>
 								<tbody>
 									<tr>
 										<th>Mac Sonucu</th>
@@ -122,8 +125,8 @@ const MatchModal = ({
 					</Accordion.Item>
 					<Accordion.Item eventKey='1'>
 						<Accordion.Header>GOL</Accordion.Header>
-						<Accordion.Body>
-							<Table striped bordered hover>
+						<Accordion.Body className={`bg-${theme}`}>
+							<Table striped bordered hover variant={theme}>
 								<tbody>
 									<tr>
 										<th>Toplam Gol Alt/Ust</th>
@@ -170,9 +173,11 @@ const MatchModal = ({
 					</Accordion.Item>
 				</Accordion>
 			</Modal.Body>
-			<Modal.Footer className='d-flex justify-content-between'>
-				<div className='text-muted'>{match.date}</div>
-				<div className='text-muted'>{match.league}</div>
+			<Modal.Footer
+				className={`bg-${theme} text-${otherTheme} d-flex justify-content-between`}
+			>
+				<div>{match.date}</div>
+				<div>{match.league}</div>
 			</Modal.Footer>
 		</Modal>
 	)

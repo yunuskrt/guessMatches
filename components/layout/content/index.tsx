@@ -1,15 +1,19 @@
 import React, { ReactNode } from 'react'
 import Container from 'react-bootstrap/Container'
+import { useGlobalContext } from '@contexts/context'
 
 type Props = {
 	children: ReactNode
 }
 
 const Content = ({ children }: Props) => {
+	const { theme } = useGlobalContext()
 	return (
-		<Container fluid='xl' className='justify-content-md-center p-3'>
-			{children}
-		</Container>
+		<div className={`bg-${theme}`}>
+			<Container fluid='xl' className='justify-content-md-center p-4'>
+				{children}
+			</Container>
+		</div>
 	)
 }
 

@@ -1,7 +1,12 @@
 .offcanvasitem:hover{
     background-color: #eee;
+    color: #000000;
     cursor: pointer;
 }
 .offcanvasitem{
     padding: 0.5rem;
+}
+
+.deneme{
+    color: #fff
 }

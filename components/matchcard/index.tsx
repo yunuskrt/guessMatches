@@ -8,8 +8,11 @@ import { FiMoreHorizontal } from 'react-icons/fi'
 import MatchProps from '@models/match'
 import styles from './matchcard.module.css'
 import MatchModal from '@components/modals/matchmodal'
+import { useGlobalContext } from '@contexts/context'
 
 const MatchCard = (match: MatchProps) => {
+	const { theme } = useGlobalContext()
+	const otherTheme = theme === 'light' ? 'dark' : 'light'
 	const data = {
 		ms: [
 			['ms-1', 'ms-0', 'ms-2'],
@@ -38,8 +41,8 @@ const MatchCard = (match: MatchProps) => {
 	}
 	return (
 		<>
-			<Col key='a' xs={12} sm={6} md={4} lg={3}>
-				<Card className='shadow text-center p-3'>
+			<Col xs={12} sm={6} md={4} lg={3}>
+				<Card bg={theme} text={otherTheme} className='shadow text-center p-3'>
 					<Card.Header className='d-flex justify-content-between p-3'>
 						<div>{match.league}</div>
 						<IconButton

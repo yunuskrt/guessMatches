@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import moment from 'moment'
+import { useGlobalContext } from '@contexts/context'
 type Props = {
 	date: string
 }
 
 const Countdown = ({ date }: Props) => {
 	const [countdown, setCountdown] = useState('')
+	const { theme } = useGlobalContext()
+	const otherTheme = theme === 'light' ? 'dark' : 'light'
 
 	useEffect(() => {
 		const specifiedDate = moment(date, 'YYYY-MM-DD HH:mm')
@@ -35,9 +38,9 @@ const Countdown = ({ date }: Props) => {
 		return <div></div>
 	}
 	return (
-		<div>
-			<div className='text-underline'>{date}</div>
-			{countdown}
+		<div className={`text-${otherTheme}`}>
+			<div>{date}</div>
+			<div>{countdown}</div>
 		</div>
 	)
 }

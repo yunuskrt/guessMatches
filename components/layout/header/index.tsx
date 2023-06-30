@@ -11,18 +11,26 @@ import { CgDarkMode, CgEnter } from 'react-icons/cg'
 import { PiNotebook } from 'react-icons/pi'
 import { MdAddCircleOutline } from 'react-icons/md'
 import { ImListNumbered } from 'react-icons/im'
+import { useGlobalContext } from '@contexts/context'
 import styles from './header.module.css'
 type Props = {}
 
-function OffcanvasExample(props: Props) {
+const Header = (props: Props) => {
 	const [offcanvasVisible, setOffcanvasVisible] = useState(false)
 
 	const handleToggleOffcanvas = () => {
 		setOffcanvasVisible((prevVisible) => !prevVisible)
 	}
 
+	const { theme, handleTheme } = useGlobalContext()
+	const otherTheme = theme === 'light' ? 'dark' : 'light'
 	return (
-		<Navbar expand='lg' className='bg-body-tertiary mb-3'>
+		<Navbar
+			bg={theme}
+			data-bs-theme={theme}
+			expand='lg'
+			className='bg-body-tertiary'
+		>
 			<Container fluid>
 				<Navbar.Brand href='#'>GuessMatches</Navbar.Brand>
 				<Navbar.Toggle
@@ -34,6 +42,7 @@ function OffcanvasExample(props: Props) {
 					onHide={() => setOffcanvasVisible(false)}
 					aria-labelledby='offcanvasNavbarLabel-expand-lg'
 					placement='end'
+					className={`bg-${theme} text-${otherTheme}`}
 				>
 					<Offcanvas.Header closeButton>
 						<Offcanvas.Title id='offcanvasNavbarLabel-expand-lg'>
@@ -45,7 +54,7 @@ function OffcanvasExample(props: Props) {
 							{offcanvasVisible ? (
 								<div
 									className={`${styles.offcanvasitem} d-flex align-items-center`}
-									onClick={() => setOffcanvasVisible(false)}
+									onClick={handleTheme}
 								>
 									<CgDarkMode className='me-2' size={35} />
 									<span>Change Theme</span>
@@ -55,9 +64,7 @@ function OffcanvasExample(props: Props) {
 									<IconButton
 										id='theme'
 										icon=<CgDarkMode size={35} />
-										onClick={() => {
-											console.log('theme changed')
-										}}
+										onClick={handleTheme}
 										tooltipMessage='Change theme'
 									/>
 								</div>
@@ -118,7 +125,7 @@ function OffcanvasExample(props: Props) {
 								className='me-2'
 								aria-label='Search'
 							/>
-							<Button variant='outline-success'>Search</Button>
+							<Button variant={`outline-${otherTheme}`}>Search</Button>
 						</Form>
 					</Offcanvas.Body>
 				</Navbar.Offcanvas>
@@ -127,4 +134,4 @@ function OffcanvasExample(props: Props) {
 	)
 }
 
-export default OffcanvasExample
+export default Header
