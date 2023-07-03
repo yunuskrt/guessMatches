@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
@@ -6,24 +6,42 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import Offcanvas from 'react-bootstrap/Offcanvas'
+import Badge from 'react-bootstrap/Badge'
 import IconButton from '@components/iconbutton'
 import { CgDarkMode, CgEnter } from 'react-icons/cg'
 import { PiNotebook } from 'react-icons/pi'
 import { MdAddCircleOutline } from 'react-icons/md'
 import { ImListNumbered } from 'react-icons/im'
 import { useGlobalContext } from '@contexts/context'
+import PredictionProps from '@models/prediction'
+import { CookieHandler } from '@services/cookies'
 import styles from './header.module.css'
+import SavedModal from '@components/modals/savedmodal'
+
 type Props = {}
 
 const Header = (props: Props) => {
+	const { theme, handleTheme, matchCookieChanged } = useGlobalContext()
+	const otherTheme = theme === 'light' ? 'dark' : 'light'
+
 	const [offcanvasVisible, setOffcanvasVisible] = useState(false)
+	const [savedMatches, setSavedMatches] = useState<PredictionProps[] | null>(
+		null
+	)
+	useEffect(() => {
+		const matches = CookieHandler.getPredictions()
+		setSavedMatches(matches)
+	}, [matchCookieChanged])
+	const badgeValue = savedMatches ? savedMatches.length : 0
+
+	const [show, setShow] = useState(false)
+	const handleClose = () => setShow(false)
+	const handleShow = () => setShow(true)
 
 	const handleToggleOffcanvas = () => {
 		setOffcanvasVisible((prevVisible) => !prevVisible)
 	}
 
-	const { theme, handleTheme } = useGlobalContext()
-	const otherTheme = theme === 'light' ? 'dark' : 'light'
 	return (
 		<Navbar
 			bg={theme}
@@ -32,7 +50,7 @@ const Header = (props: Props) => {
 			className='bg-body-tertiary'
 		>
 			<Container fluid>
-				<Navbar.Brand href='#'>GuessMatches</Navbar.Brand>
+				<Navbar.Brand href='/'>GuessMatches</Navbar.Brand>
 				<Navbar.Toggle
 					aria-controls='offcanvasNavbar-expand-lg'
 					onClick={handleToggleOffcanvas}
@@ -69,26 +87,46 @@ const Header = (props: Props) => {
 									/>
 								</div>
 							)}
-							{offcanvasVisible ? (
-								<div
-									className={`${styles.offcanvasitem} d-flex align-items-center`}
-									onClick={() => setOffcanvasVisible(false)}
-								>
-									<PiNotebook className='me-2' size={35} />
-									<span>Show Saved Matches</span>
-								</div>
-							) : (
-								<div className='me-2'>
-									<IconButton
-										id='theme'
-										icon=<PiNotebook size={35} />
+							<>
+								{offcanvasVisible ? (
+									<div
+										className={`${styles.offcanvasitem} d-flex align-items-center`}
 										onClick={() => {
-											console.log('theme changed')
+											handleShow()
 										}}
-										tooltipMessage='Show saved matches'
-									/>
-								</div>
-							)}
+									>
+										<PiNotebook className='me-2' size={35} />
+										<span>Show Saved Matches</span>
+									</div>
+								) : (
+									<div className='me-2'>
+										<div className='position-relative'>
+											<>
+												<IconButton
+													id='theme'
+													icon=<PiNotebook size={35} />
+													onClick={handleShow}
+													tooltipMessage='Show saved matches'
+												/>
+												{badgeValue > 0 && (
+													<Badge
+														bg={otherTheme}
+														text={theme}
+														className={styles.topbarIconBadge}
+													>
+														{badgeValue}
+													</Badge>
+												)}
+											</>
+										</div>
+									</div>
+								)}
+								<SavedModal
+									show={show}
+									handleClose={handleClose}
+									matches={savedMatches}
+								/>
+							</>
 							<NavDropdown
 								title={
 									offcanvasVisible ? (

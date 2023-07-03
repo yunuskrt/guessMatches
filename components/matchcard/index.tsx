@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import IconButton from '@components/iconbutton'
@@ -6,12 +6,15 @@ import Countdown from '@components/countdown'
 import TabBar from '@components/tabbar'
 import { FiMoreHorizontal } from 'react-icons/fi'
 import MatchProps from '@models/match'
-import styles from './matchcard.module.css'
 import MatchModal from '@components/modals/matchmodal'
+import styles from './matchcard.module.css'
 import { useGlobalContext } from '@contexts/context'
+import { CookieHandler } from '@services/cookies'
+import { getPredictionFromMatch } from '@services/helpers/prediction'
 
 const MatchCard = (match: MatchProps) => {
-	const { theme } = useGlobalContext()
+	const { theme, matchCookieChanged, handleMatchCookieChange } =
+		useGlobalContext()
 	const otherTheme = theme === 'light' ? 'dark' : 'light'
 	const data = {
 		ms: [
@@ -19,11 +22,11 @@ const MatchCard = (match: MatchProps) => {
 			['1', '0', '2'],
 		],
 		au: [
-			['ms2.5a', 'ms2.5u'],
+			['tgau-Alt', 'tgau-Ust'],
 			['Alt', 'Ust'],
 		],
 		kg: [
-			['kgvar', 'kgyok'],
+			['kg-Var', 'kg-Yok'],
 			['Var', 'Yok'],
 		],
 	}
@@ -34,11 +37,17 @@ const MatchCard = (match: MatchProps) => {
 	const handleSelect = (k: string | null) => {
 		if (k == preference) {
 			setPreference('')
+			CookieHandler.removePrediction(match.id)
 		} else {
 			setPreference(k)
+			CookieHandler.insertPrediction(getPredictionFromMatch(match, k as string))
 		}
-		console.log(match.id)
+		handleMatchCookieChange()
 	}
+	useEffect(() => {
+		const pref = CookieHandler.selectedPredictionPref(match.id)
+		setPreference(pref)
+	}, [matchCookieChanged])
 	return (
 		<>
 			<Col xs={12} sm={6} md={4} lg={3}>

@@ -27,7 +27,7 @@ const MatchModal = ({
 			['1', '0', '2'],
 		],
 		cfs: [
-			['ms1-x', 'ms1-2', 'msx-2'],
+			['cfs-1-X', 'cfs-1-2', 'cfs-X-2'],
 			['1-X', '1-2', 'X-2'],
 		],
 		hms10: [
@@ -39,15 +39,15 @@ const MatchModal = ({
 			['1', '0', '2'],
 		],
 		au: [
-			['ms2.5a', 'ms2.5u'],
+			['tgau-Alt', 'tgau-Ust'],
 			['Alt', 'Ust'],
 		],
 		kg: [
-			['kgvar', 'kgyok'],
+			['kg-Var', 'kg-Yok'],
 			['Var', 'Yok'],
 		],
 		tg: [
-			['tg0-2', 'tg3-5', 'tg6+'],
+			['tg-0-2', 'tg-3-5', 'tg-6+'],
 			['0-2', '3-5', '6+'],
 		],
 	}

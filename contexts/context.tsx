@@ -1,27 +1,57 @@
-import React, { ReactNode, createContext, useState, useContext } from 'react'
+import React, {
+	ReactNode,
+	createContext,
+	useState,
+	useContext,
+	useEffect,
+} from 'react'
+import { CookieHandler } from '@services/cookies'
 
-export const AppContext = createContext({
+interface AppContextType {
+	theme: 'light' | 'dark'
+	handleTheme: () => void
+	matchCookieChanged: boolean
+	handleMatchCookieChange: () => void
+}
+
+export const AppContext = createContext<AppContextType>({
 	theme: 'light',
 	handleTheme: () => {},
+	matchCookieChanged: false,
+	handleMatchCookieChange: () => {},
 })
 
 type Props = {
 	children: ReactNode
 }
 const AppProvider = ({ children }: Props) => {
-	const [theme, setTheme] = useState('light')
+	const [theme, setTheme] = useState<'light' | 'dark'>('light')
+	const [matchCookieChanged, setMatchCookieChanged] = useState(false)
+	useEffect(() => {
+		var theme = CookieHandler.getCookie('theme')
+		if (typeof theme === 'string' && (theme === 'light' || theme === 'dark')) {
+			setTheme(theme)
+		}
+	}, [])
 	const handleTheme = () => {
 		if (theme === 'light') {
 			setTheme('dark')
+			CookieHandler.setCookie('theme', 'dark', 3)
 		} else {
 			setTheme('light')
+			CookieHandler.setCookie('theme', 'light', 3)
 		}
+	}
+	const handleMatchCookieChange = () => {
+		setMatchCookieChanged(!matchCookieChanged)
 	}
 	return (
 		<AppContext.Provider
 			value={{
 				theme,
 				handleTheme,
+				matchCookieChanged,
+				handleMatchCookieChange,
 			}}
 		>
 			{children}
