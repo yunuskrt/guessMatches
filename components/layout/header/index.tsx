@@ -17,10 +17,12 @@ import PredictionProps from '@models/prediction'
 import { CookieHandler } from '@services/cookies'
 import styles from './header.module.css'
 import SavedModal from '@components/modals/savedmodal'
+import { useRouter } from 'next/router'
 
 type Props = {}
 
 const Header = (props: Props) => {
+	const router = useRouter()
 	const { theme, handleTheme, matchCookieChanged } = useGlobalContext()
 	const otherTheme = theme === 'light' ? 'dark' : 'light'
 
@@ -92,7 +94,9 @@ const Header = (props: Props) => {
 									<div
 										className={`${styles.offcanvasitem} d-flex align-items-center`}
 										onClick={() => {
-											handleShow()
+											if (router.pathname !== '/create') {
+												handleShow()
+											}
 										}}
 									>
 										<PiNotebook className='me-2' size={35} />
@@ -105,7 +109,11 @@ const Header = (props: Props) => {
 												<IconButton
 													id='theme'
 													icon=<PiNotebook size={35} />
-													onClick={handleShow}
+													onClick={() => {
+														if (router.pathname !== '/create') {
+															handleShow()
+														}
+													}}
 													tooltipMessage='Show saved matches'
 												/>
 												{badgeValue > 0 && (

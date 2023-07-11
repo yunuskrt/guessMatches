@@ -1,6 +1,6 @@
 import React from 'react'
 import Row from 'react-bootstrap/Row'
-import MatchCard from '@components/matchcard'
+import MatchCard from '@components/cards/matchcard'
 import data from '../data'
 import MatchProps from '@models/match'
 

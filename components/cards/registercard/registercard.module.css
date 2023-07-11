@@ -1,0 +1,8 @@
+.cardcontainer {
+    height: 30rem;
+    width: 30rem;
+}
+
+.dot:hover {
+    cursor: pointer;
+}

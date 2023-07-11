@@ -7,6 +7,7 @@ import { RiEmotionUnhappyLine } from 'react-icons/ri'
 import { CookieHandler } from '@services/cookies'
 import PredictionProps from '@models/prediction'
 import { useGlobalContext } from '@contexts/context'
+import { useRouter } from 'next/router'
 
 type Props = {
 	show: boolean
@@ -22,6 +23,7 @@ const NotFound = () => {
 	)
 }
 const SavedModal = ({ show, handleClose, matches }: Props) => {
+	const router = useRouter()
 	const { theme, handleMatchCookieChange } = useGlobalContext()
 	const otherTheme = theme === 'light' ? 'dark' : 'light'
 	const isNotFound = matches === null || matches.length === 0
@@ -88,7 +90,14 @@ const SavedModal = ({ show, handleClose, matches }: Props) => {
 				>
 					Clear Matches
 				</Button>
-				<Button variant='outline-success' disabled={isNotFound}>
+				<Button
+					variant='outline-success'
+					disabled={isNotFound}
+					onClick={() => {
+						router.push('/create')
+						handleClose()
+					}}
+				>
 					Create League
 				</Button>
 			</Modal.Footer>
