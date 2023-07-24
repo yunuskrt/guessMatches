@@ -149,7 +149,7 @@ const Header = (props: Props) => {
 								id='offcanvasNavbarDropdown-expand-lg'
 								className={offcanvasVisible ? 'p-2' : 'me-2'}
 							>
-								<NavDropdown.Item href='#action3'>
+								<NavDropdown.Item href='/create'>
 									<div className='d-flex align-items-center'>
 										<MdAddCircleOutline className='me-2' size={25} />
 										<span>Create League</span>

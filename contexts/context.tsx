@@ -12,6 +12,8 @@ interface AppContextType {
 	handleTheme: () => void
 	matchCookieChanged: boolean
 	handleMatchCookieChange: () => void
+	leagueId: string | null
+	handleLeagueId: (id: string) => void
 }
 
 export const AppContext = createContext<AppContextType>({
@@ -19,6 +21,8 @@ export const AppContext = createContext<AppContextType>({
 	handleTheme: () => {},
 	matchCookieChanged: false,
 	handleMatchCookieChange: () => {},
+	leagueId: null,
+	handleLeagueId: () => {},
 })
 
 type Props = {
@@ -27,6 +31,7 @@ type Props = {
 const AppProvider = ({ children }: Props) => {
 	const [theme, setTheme] = useState<'light' | 'dark'>('light')
 	const [matchCookieChanged, setMatchCookieChanged] = useState(false)
+	const [leagueId, setLeagueId] = useState<string | null>(null)
 
 	useEffect(() => {
 		var theme = CookieHandler.getCookie('theme')
@@ -46,6 +51,9 @@ const AppProvider = ({ children }: Props) => {
 	const handleMatchCookieChange = () => {
 		setMatchCookieChanged(!matchCookieChanged)
 	}
+	const handleLeagueId = (id: string) => {
+		setLeagueId(id)
+	}
 
 	return (
 		<AppContext.Provider
@@ -54,6 +62,8 @@ const AppProvider = ({ children }: Props) => {
 				handleTheme,
 				matchCookieChanged,
 				handleMatchCookieChange,
+				leagueId,
+				handleLeagueId,
 			}}
 		>
 			{children}

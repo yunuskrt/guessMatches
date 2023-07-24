@@ -6,6 +6,7 @@ import { useGlobalContext } from '@contexts/context'
 import { CookieHandler } from '@services/cookies'
 import { useRouter } from 'next/router'
 import { GoDot, GoDotFill } from 'react-icons/go'
+import { nanoid } from 'nanoid'
 import styles from './createcard.module.css'
 
 type RegisterProps = {
@@ -86,7 +87,7 @@ const LeagueInfoBody = (props: Props) => {
 	const [nameValid, setNameValid] = useState(true)
 	const [passwordValid, setPasswordValid] = useState(true)
 
-	const { theme } = useGlobalContext()
+	const { theme, handleLeagueId } = useGlobalContext()
 	const otherTheme = theme === 'light' ? 'dark' : 'light'
 
 	const router = useRouter()
@@ -124,7 +125,9 @@ const LeagueInfoBody = (props: Props) => {
 				leagueName: nameValue,
 				leaguePassword: passwordValue,
 			})
-			router.push('/confirm')
+			const leagueId = nanoid()
+			handleLeagueId(leagueId)
+			router.push(`/confirm/${leagueId}`)
 		}
 	}
 
