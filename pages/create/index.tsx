@@ -1,10 +1,12 @@
 import React from 'react'
-import RegisterCard from '@components/cards/registercard'
+import CreateCard from '@components/cards/createcard'
 
-const Create = () => {
+type Props = {}
+
+const Create = (props: Props) => {
 	return (
 		<div>
-			<RegisterCard />
+			<CreateCard />
 		</div>
 	)
 }

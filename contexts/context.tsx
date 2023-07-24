@@ -12,14 +12,6 @@ interface AppContextType {
 	handleTheme: () => void
 	matchCookieChanged: boolean
 	handleMatchCookieChange: () => void
-	unlockCreate: {
-		register: boolean
-		leagueinfo: boolean
-		confirmation: boolean
-	}
-	handleUnlockCreate: (body: 'register' | 'leagueinfo' | 'confirmation') => void
-	createIndex: number
-	handleCreateIndex: (index: 0 | 1 | 2) => void
 }
 
 export const AppContext = createContext<AppContextType>({
@@ -27,10 +19,6 @@ export const AppContext = createContext<AppContextType>({
 	handleTheme: () => {},
 	matchCookieChanged: false,
 	handleMatchCookieChange: () => {},
-	unlockCreate: { register: true, leagueinfo: false, confirmation: false },
-	handleUnlockCreate: () => {},
-	createIndex: 0,
-	handleCreateIndex: () => {},
 })
 
 type Props = {
@@ -39,12 +27,6 @@ type Props = {
 const AppProvider = ({ children }: Props) => {
 	const [theme, setTheme] = useState<'light' | 'dark'>('light')
 	const [matchCookieChanged, setMatchCookieChanged] = useState(false)
-	const [unlockCreate, setUnlockCreate] = useState({
-		register: true,
-		leagueinfo: false,
-		confirmation: false,
-	})
-	const [createIndex, setCreateIndex] = useState(0)
 
 	useEffect(() => {
 		var theme = CookieHandler.getCookie('theme')
@@ -65,17 +47,6 @@ const AppProvider = ({ children }: Props) => {
 		setMatchCookieChanged(!matchCookieChanged)
 	}
 
-	const handleUnlockCreate = (
-		body: 'register' | 'leagueinfo' | 'confirmation'
-	) => {
-		let copyCreate = unlockCreate
-		copyCreate[body] = true
-		setUnlockCreate(copyCreate)
-	}
-
-	const handleCreateIndex = (index: 0 | 1 | 2) => {
-		setCreateIndex(index)
-	}
 	return (
 		<AppContext.Provider
 			value={{
@@ -83,10 +54,6 @@ const AppProvider = ({ children }: Props) => {
 				handleTheme,
 				matchCookieChanged,
 				handleMatchCookieChange,
-				unlockCreate,
-				handleUnlockCreate,
-				createIndex,
-				handleCreateIndex,
 			}}
 		>
 			{children}
