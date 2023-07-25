@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import { useGlobalContext } from '@contexts/context'
 import { CookieHandler } from '@services/cookies'
+import { CipherHandler } from '@services/cipher'
 import { useRouter } from 'next/router'
 import { GoDot, GoDotFill } from 'react-icons/go'
 import { nanoid } from 'nanoid'
@@ -91,7 +92,7 @@ const LeagueInfoBody = (props: Props) => {
 	const otherTheme = theme === 'light' ? 'dark' : 'light'
 
 	const router = useRouter()
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 
 		const nameValue = nameRef.current?.value || ''
@@ -110,7 +111,7 @@ const LeagueInfoBody = (props: Props) => {
 			nameValidation = true
 		}
 
-		if (passwordValue.length > 8) {
+		if (passwordValue.length > 10) {
 			setPasswordValid(false)
 			passwordRef.current?.classList.add('is-invalid')
 		} else {
@@ -121,9 +122,13 @@ const LeagueInfoBody = (props: Props) => {
 
 		if (nameValidation && passwordValidation) {
 			// Process the correct submission
+			let hashedPassvalue = ''
+			if (passwordValue.length !== 0) {
+				hashedPassvalue = await CipherHandler.encrypt(passwordValue)
+			}
 			console.log({
 				leagueName: nameValue,
-				leaguePassword: passwordValue,
+				leaguePassword: hashedPassvalue,
 			})
 			const leagueId = nanoid()
 			handleLeagueId(leagueId)
@@ -161,7 +166,7 @@ const LeagueInfoBody = (props: Props) => {
 					/>
 					{!passwordValid && (
 						<div className='invalid-feedback'>
-							Password can not be more than 8 characters.
+							Password can not be more than 10 characters.
 						</div>
 					)}
 				</Form.Group>
